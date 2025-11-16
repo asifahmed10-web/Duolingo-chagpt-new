@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="wrap">
+  <header class="top small">
+    <button class="btn link" onclick="location.href='index.html'">← Home</button>
+    <h1>Profile Dashboard</h1>
+  </header>
+
+  <main class="card profile-card" id="dashboardMain">
+    <!-- profile populated by script -->
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script>
+(function(){
+  const me = Users.currentUser();
+  if(!me){ alert('Please login'); location.href='login.html'; return; }
+  const main = document.getElementById('dashboardMain');
+  main.innerHTML = `
+    <div class="profile-top">
+      <div class="avatar">${me.displayName.charAt(0).toUpperCase()}</div>
+      <div>
+        <div class="name">${me.displayName}</div>
+        <div class="muted small">@${me.username}</div>
+      </div>
+    </div>
+    <div class="stats">
+      <div>Level: ${me.level}</div>
+      <div>XP: ${me.xp}</div>
+      <div>Streak: ${me.streak} days</div>
+      <div>Total Points: ${me.totalPoints}</div>
+    </div>
+    <hr/>
+    <h3>Achievements</h3>
+    <div id="achievements" class="ach-grid"></div>
+    <hr/>
+    <h3>History (recent)</h3>
+    <div id="history"></div>
+    <div style="margin-top:12px">
+      <button id="export" class="btn small">Export profile (JSON)</button>
+      <button id="clear" class="btn small outline">Clear data</button>
+    </div>
+  `;
+  // achievements
+  const ach = document.getElementById('achievements');
+  (me.achievements||[]).forEach(a=>{
+    const el = document.createElement('div'); el.className='ach'; el.innerHTML = `<div class='ach-name'>${a}</div>`; ach.appendChild(el);
+  });
+  // recent history
+  const hist = document.getElementById('history');
+  (me.history||[]).slice().reverse().slice(0,30).forEach(h=>{
+    const el = document.createElement('div'); el.className='hist-item';
+    el.innerHTML = `<div><strong>${h.mode}</strong> · ${h.date}</div><div>Score: ${h.score} · Correct: ${h.correct}/${h.total}</div>`;
+    hist.appendChild(el);
+  });
+  document.getElementById('export').addEventListener('click', ()=>{
+    const blob = new Blob([JSON.stringify(me,null,2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'profile_'+me.username+'.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+  });
+  document.getElementById('clear').addEventListener('click', ()=>{
+    if(confirm('Clear profile data (keep account)?')){ Users.clearProfile(); location.reload(); }
+  });
+})();
+</script>
+</body>
+</html>
