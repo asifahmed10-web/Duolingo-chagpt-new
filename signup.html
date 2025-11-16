@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sign up</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="wrap">
+  <header class="top small">
+    <button class="btn link" onclick="location.href='index.html'">← Home</button>
+    <h1>Sign up</h1>
+  </header>
+
+  <main class="card auth-card">
+    <label>Username</label>
+    <input id="username" class="text-input" />
+    <label>Password</label>
+    <input id="password" type="password" class="text-input" />
+    <label>Display name (optional)</label>
+    <input id="display" class="text-input" />
+    <div style="margin-top:12px">
+      <button id="doSignup" class="btn primary">Create account</button>
+      <a href="login.html" class="btn link">Already have account?</a>
+    </div>
+    <div id="msg" class="muted small"></div>
+  </main>
+</div>
+
+<script src="script.js"></script>
+<script>
+document.getElementById('doSignup').addEventListener('click', ()=>{
+  const u = document.getElementById('username').value.trim();
+  const p = document.getElementById('password').value;
+  const d = document.getElementById('display').value.trim();
+  const r = Users.signup(u,p,{displayName:d||u});
+  const msg = document.getElementById('msg');
+  if(r.ok){ msg.textContent = 'Account created. Redirecting to dashboard...'; setTimeout(()=> location.href='dashboard.html',800); }
+  else { msg.textContent = 'Error: ' + r.error; }
+});
+</script>
+</body>
+</html>
