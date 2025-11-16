@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vocabulary Practice</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="wrap">
+  <header class="top small">
+    <button class="btn link" onclick="location.href='index.html'">← Home</button>
+    <h1>Vocabulary Practice</h1>
+    <p class="muted">Is this a real English word? 6s per question — 20 questions per season</p>
+  </header>
+  <main class="card practice-card">
+    <div class="scorebar">
+      <div>Season: <span id="seasonNo">1</span></div>
+      <div>Q <span id="qIndex">0</span>/20</div>
+      <div>Points: <span id="points">0</span></div>
+    </div>
+    <div id="wordBox" class="word-box">Loading…</div>
+    <div class="hintline"><span id="translation"></span></div>
+    <div class="timer-wrap">
+      <div id="timerLabel">6</div>
+      <div class="timer-bar"><div id="timerProgress"></div></div>
+    </div>
+    <div class="controls">
+      <button id="realBtn" class="btn large green">Real Word</button>
+      <button id="fakeBtn" class="btn large red outline">Fake Word</button>
+    </div>
+    <div id="result" class="result muted"></div>
+    <div class="footer-controls">
+      <label><input type="checkbox" id="showAnswer"> Show correct after answer</label>
+      <button class="btn link" id="endSeason">End season</button>
+    </div>
+  </main>
+</div>
+<script src="script.js"></script>
+<script>
+(async function(){ await app.ensureDatasetsReady(); VocabUI.init(); })();
+</script>
+</body>
+</html>
