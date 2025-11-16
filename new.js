@@ -1,8 +1,8 @@
-Promise.race([
-    fetch("/vocab.json").then(r => r.json()),
-    new Promise((_, reject) => setTimeout(() => reject("timeout"), 5000))
-])
-.then(data => startGame(data))
-.catch(err => {
-    document.getElementById("wordBox").innerHTML = "Failed to load data";
-});
+async function loadWords() {
+    const response = await fetch("/vocab.json");
+    const data = await response.json();
+
+    // random 20 words only
+    return data.sort(() => Math.random() - 0.5).slice(0, 20);
+}
+
