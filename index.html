@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>DET Practice Hub</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">D</div>
+    <div class="title-block">
+      <h1>DET Practice Hub</h1>
+      <p class="muted">Vocabulary & Fill-in-the-blanks — seasons (20 questions)</p>
+    </div>
+    <div class="user-block" id="userBlock">
+      <button class="btn link" onclick="location.href='signup.html'">Sign up</button>
+      <button class="btn link" onclick="location.href='login.html'">Login</button>
+    </div>
+  </header>
+
+  <main class="card home-card">
+    <div class="grid">
+      <div class="panel">
+        <h2>Vocabulary Practice</h2>
+        <p class="muted">6 seconds per word · 20 questions per season</p>
+        <a class="btn primary" href="vocab.html">Start Vocabulary</a>
+      </div>
+
+      <div class="panel">
+        <h2>Fill in the Blanks</h2>
+        <p class="muted">30 seconds per sentence · 20 questions per season</p>
+        <a class="btn primary outline" href="fill.html">Start Fill</a>
+      </div>
+    </div>
+
+    <div class="meta">
+      <button id="regen" class="btn small">Regenerate datasets</button>
+      <button id="download" class="btn small outline">Download datasets (JSON)</button>
+      <div id="status" class="muted small">Datasets: checking...</div>
+    </div>
+  </main>
+
+  <footer class="foot muted">Made for DET-style practice • Local accounts • 5 points per correct answer</footer>
+</div>
+
+<script src="script.js"></script>
+<script>
+(async function(){
+  await app.ensureDatasetsReady();
+  document.getElementById('status').textContent = 'Ready — 5000 vocab, 3000 blanks (local)';
+  document.getElementById('download').addEventListener('click', ()=> app.downloadDatasets());
+  document.getElementById('regen').addEventListener('click', async ()=>{
+    if(confirm('Regenerate datasets? This will overwrite local stored lists.')) {
+      app.forceRegenerate();
+      alert('Regenerated. Reloading...');
+      location.reload();
+    }
+  });
+  // show login status
+  const me = Users.currentUser();
+  const ub = document.getElementById('userBlock');
+  if(me){
+    ub.innerHTML = `<a class="btn link" href="dashboard.html">${me.displayName}</a> <button class="btn link" onclick="Users.logout(); location.reload();">Logout</button>`;
+  }
+})();
+</script>
+</body>
+</html>
